@@ -1,40 +1,40 @@
 package com.csc;
 
-class ChainLink {
-    private String data;
-    private ChainLink next;
+class Chainlink<T> {
+    private T data;
+    private Chainlink<T> next;
 
-    public ChainLink(String data) {
+    public Chainlink(T data) {
         this.data = data;
         this.next = null;
     }
 
-    public String getData() {
+    public T getData() {
         return data;
     }
 
-    public ChainLink getNext() {
+    public Chainlink<T> getNext() {
         return next;
     }
 
-    public void setNext(ChainLink next) {
+    public void setNext(Chainlink<T> next) {
         this.next = next;
     }
 }
 
-public class chain {
-    private ChainLink head;
+public class chain<T> {
+    private Chainlink<T> head;
 
     public chain() {
         this.head = null;
     }
 
-    public void append(String data) {
-        ChainLink newLink = new ChainLink(data);
+    public void append(T data) {
+        Chainlink<T> newLink = new Chainlink<>(data);
         if (head == null) {
             head = newLink;
         } else {
-            ChainLink current = head;
+            Chainlink<T> current = head;
             while (current.getNext() != null) {
                 current = current.getNext();
             }
@@ -42,8 +42,18 @@ public class chain {
         }
     }
 
-    public String view(int index) {
-        ChainLink current = head;
+    public void prepend(T data) {
+        Chainlink<T> newLink = new Chainlink<>(data);
+        if (head == null) {
+            head = newLink;
+        } else {
+            newLink.setNext(head);
+            head = newLink;
+        }
+    }
+
+    public T view(int index) {
+        Chainlink<T> current = head;
         int count = 0;
 
         while (current != null) {
@@ -54,5 +64,21 @@ public class chain {
             current = current.getNext();
         }
         throw new IndexOutOfBoundsException("Index out of bounds");
+    }
+
+    public int countRemainingLinks(Chainlink<T> node) {
+        if (node == null) {
+            throw new IllegalArgumentException("Node cannot be null");
+        }
+        
+        int count = 0;
+        Chainlink<T> current = node.getNext();
+        
+        while (current != null) {
+            count++;
+            current = current.getNext();
+        }
+        
+        return count;
     }
 }
